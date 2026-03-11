@@ -1,0 +1,45 @@
+# VL-JEPA VQA — Default configuration
+# Replace `encoder_type` with "clip" for the baseline comparison.
+
+encoder:
+  type: "vl_jepa"         # "vl_jepa" or "clip"
+  embed_dim: 768
+  img_size: 224
+  patch_size: 16
+  depth: 12
+  num_heads: 12
+  vocab_size: 30522
+  max_text_len: 77
+  dropout: 0.1
+
+  # VL-JEPA-specific
+  predictor_dim: 384
+  predictor_depth: 4
+
+  # CLIP-specific
+  projection_dim: 512
+
+model:
+  num_answers: 3129       # GQA answer vocabulary size
+  hidden_dim: 1024
+  dropout: 0.1
+
+training:
+  batch_size: 64
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  epochs: 20
+  warmup_steps: 1000
+  max_grad_norm: 1.0
+  seed: 42
+
+data:
+  dataset: "gqa"          # "gqa", "vqav2", or "tallyqa"
+  images_dir: "data/gqa/images"
+  questions_path: "data/gqa/questions.json"
+  annotations_path: ""    # only needed for vqav2
+  max_text_len: 77
+
+output:
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"

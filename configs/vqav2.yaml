@@ -1,0 +1,40 @@
+# VQAv2 evaluation configuration
+
+encoder:
+  type: "vl_jepa"
+  embed_dim: 768
+  img_size: 224
+  patch_size: 16
+  depth: 12
+  num_heads: 12
+  vocab_size: 30522
+  max_text_len: 77
+  dropout: 0.1
+  predictor_dim: 384
+  predictor_depth: 4
+  projection_dim: 512
+
+model:
+  num_answers: 3129
+  hidden_dim: 1024
+  dropout: 0.1
+
+training:
+  batch_size: 64
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  epochs: 20
+  warmup_steps: 1000
+  max_grad_norm: 1.0
+  seed: 42
+
+data:
+  dataset: "vqav2"
+  images_dir: "data/vqav2/images"
+  questions_path: "data/vqav2/questions.json"
+  annotations_path: "data/vqav2/annotations.json"
+  max_text_len: 77
+
+output:
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
