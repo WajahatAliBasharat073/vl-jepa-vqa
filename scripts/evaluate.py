@@ -13,39 +13,11 @@ import logging
 import torch
 import yaml
 
-from src.models.encoders.vl_jepa_encoder import VLJEPAEncoder
-from src.models.encoders.clip_encoder import CLIPEncoder
 from src.models.vqa_model import VQAModel
+from src.utils import build_encoder
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
-
-
-def build_encoder(cfg: dict) -> torch.nn.Module:
-    enc = cfg["encoder"]
-    common = dict(
-        embed_dim=enc["embed_dim"],
-        img_size=enc["img_size"],
-        patch_size=enc["patch_size"],
-        depth=enc["depth"],
-        num_heads=enc["num_heads"],
-        vocab_size=enc["vocab_size"],
-        max_text_len=enc["max_text_len"],
-        dropout=enc.get("dropout", 0.0),
-    )
-    if enc["type"] == "vl_jepa":
-        return VLJEPAEncoder(
-            **common,
-            predictor_dim=enc.get("predictor_dim", 384),
-            predictor_depth=enc.get("predictor_depth", 4),
-        )
-    elif enc["type"] == "clip":
-        return CLIPEncoder(
-            **common,
-            projection_dim=enc.get("projection_dim", 512),
-        )
-    else:
-        raise ValueError(f"Unknown encoder type: {enc['type']}")
 
 
 def main() -> None:
@@ -66,7 +38,7 @@ def main() -> None:
         dropout=cfg["model"].get("dropout", 0.1),
     )
 
-    ckpt = torch.load(args.checkpoint, map_location=args.device, weights_only=False)
+    ckpt = torch.load(args.checkpoint, map_location=args.device, weights_only=True)
     model.load_state_dict(ckpt["model_state_dict"])
     model.to(args.device)
     model.eval()

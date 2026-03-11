@@ -113,7 +113,7 @@ class Trainer:
 
     def load_checkpoint(self, path: str) -> None:
         """Load model and optimizer state."""
-        ckpt = torch.load(path, map_location=self.device, weights_only=False)
+        ckpt = torch.load(path, map_location=self.device, weights_only=True)
         self.model.load_state_dict(ckpt["model_state_dict"])
         self.optimizer.load_state_dict(ckpt["optimizer_state_dict"])
         logger.info("Checkpoint loaded from %s", path)
